@@ -3,16 +3,20 @@ with(all) {
     if (!variable_instance_exists(id, "creature")) continue;
     
     var _move = 0;
-    if (creature.state != PlayerState.KNOCKBACK) {  // Only process normal movement if not in knockback
-        if (creature.input.right) _move = creature.stats.move_speed;
-        if (creature.input.left) _move = -creature.stats.move_speed;
-        creature.xsp = _move;
-
-        // Update facing direction only when moving
-        if (creature.input.right) creature.facing_direction = "right";
-        if (creature.input.left) creature.facing_direction = "left";
-    }
+    if (creature.state != PlayerState.KNOCKBACK) {  
+    if (creature.input.right) _move = creature.stats.move_speed;
+    if (creature.input.left) _move = -creature.stats.move_speed;
+    creature.xsp = _move;
+} else {
+    // Gradually reduce knockback speed
+    creature.xsp *= 0.9;  // Stronger air resistance
     
+    // Allow some control during knockback, but reduced
+    var control_speed = creature.stats.move_speed * 0.1;  // Reduced to 10% control
+    if (creature.input.right) creature.xsp = min(creature.xsp + control_speed, creature.stats.move_speed);
+    if (creature.input.left) creature.xsp = max(creature.xsp - control_speed, -creature.stats.move_speed);
+}
+
     // Horizontal collision
     if (place_meeting(x + creature.xsp, y, obj_floor)) {
         while (!place_meeting(x + sign(creature.xsp), y, obj_floor)) {
@@ -29,7 +33,7 @@ with(all) {
     
     switch (creature.state) {
         case PlayerState.KNOCKBACK:
-            // Apply gravity but maintain horizontal momentum
+            // Apply gravity
             creature.ysp += GRAVITY;
             if (_grounded) {
                 creature.state = PlayerState.NORMAL;
