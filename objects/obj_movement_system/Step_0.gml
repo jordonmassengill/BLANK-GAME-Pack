@@ -1,4 +1,4 @@
-//obj_movement_system Step Event
+// obj_movement_system Step Event
 with(all) {
    if (!variable_instance_exists(id, "creature")) continue;
    
@@ -53,6 +53,7 @@ with(all) {
                creature.jump_squat_timer = JUMP_SQUAT_FRAMES;
                creature.ysp = 0;
                creature.jump_released = false;
+               creature.jump_button_released = false; // Reset jump button release flag
            } else if (!_grounded && creature.input.jump && creature.has_jetpack && creature.jetpack_fuel > 0 && creature.jump_released) {
                creature.ysp = max(creature.ysp + JETPACK_FORCE, JETPACK_MAX_SPEED);
                creature.jetpack_fuel--;
@@ -65,17 +66,17 @@ with(all) {
                creature.state = PlayerState.JUMPING;
                creature.ysp = JUMP_FORCE;
                creature.jump_timer = 0;
+               creature.jump_button_released = false; // Reset jump button release flag
            }
            break;
            
        case PlayerState.JUMPING:
            creature.jump_timer++;
            
-           if (creature.jump_timer >= MIN_JUMP_FRAMES) {
-               if (!creature.input.jump) {
-                   creature.ysp *= JUMP_RELEASE_MULTIPLIER;
-                   creature.jump_released = true;
-               }
+           // Apply JUMP_RELEASE_MULTIPLIER only once when the jump button is released
+           if (!creature.input.jump && !creature.jump_button_released) {
+               creature.ysp *= JUMP_RELEASE_MULTIPLIER;
+               creature.jump_button_released = true; // Mark the jump button as released
            }
            
            if (creature.input.jump && creature.has_jetpack && creature.jetpack_fuel > 0 && creature.jump_released) {
