@@ -1,22 +1,19 @@
 {
   "$GMObject":"",
-  "%Name":"obj_upgrade",
+  "%Name":"obj_exchange_menu",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_upgrade",
+  "name":"obj_exchange_menu",
   "overriddenProperties":[],
   "parent":{
-    "name":"obj_Level",
-    "path":"folders/Objects/obj_Level.yy",
+    "name":"obj_controller",
+    "path":"folders/Object System/obj_Systems/obj_controller.yy",
   },
-  "parentObjectId":{
-    "name":"obj_floor",
-    "path":"objects/obj_floor/obj_floor.yy",
-  },
+  "parentObjectId":null,
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -33,11 +30,8 @@
   "properties":[],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
-  "solid":true,
-  "spriteId":{
-    "name":"sUpgrade",
-    "path":"sprites/sUpgrade/sUpgrade.yy",
-  },
+  "solid":false,
+  "spriteId":null,
   "spriteMaskId":null,
   "visible":true,
 }

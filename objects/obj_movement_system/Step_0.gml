@@ -1,39 +1,32 @@
-//Step Event for obj_movement_system
+//obj_movement_system Step Event
 with(all) {
     if (!variable_instance_exists(id, "creature")) continue;
     
     var _move = 0;
     if (creature.state != PlayerState.KNOCKBACK) {  
-    if (creature.input.right) _move = creature.stats.move_speed;
-    if (creature.input.left) _move = -creature.stats.move_speed;
-    creature.xsp = _move;
-} else {
-    // Gradually reduce knockback speed
-    creature.xsp *= 0.9;  // Stronger air resistance
-    
-    // Allow some control during knockback, but reduced
-    var control_speed = creature.stats.move_speed * 0.1;  // Reduced to 10% control
-    if (creature.input.right) creature.xsp = min(creature.xsp + control_speed, creature.stats.move_speed);
-    if (creature.input.left) creature.xsp = max(creature.xsp - control_speed, -creature.stats.move_speed);
-}
-
-    // Horizontal collision
-    if (place_meeting(x + creature.xsp, y, obj_floor)) {
-        while (!place_meeting(x + sign(creature.xsp), y, obj_floor)) {
-            x += sign(creature.xsp);
-        }
-        creature.xsp = 0;
-        if (creature.state == PlayerState.KNOCKBACK) {
-            creature.state = PlayerState.NORMAL;  // End knockback when hitting a wall
-        }
+        if (creature.input.right) _move = creature.stats.move_speed;
+        if (creature.input.left) _move = -creature.stats.move_speed;
+        creature.xsp = _move;
+    } else {
+        creature.xsp *= 0.9;
+        
+        var control_speed = creature.stats.move_speed * 0.1;
+        if (creature.input.right) creature.xsp = min(creature.xsp + control_speed, creature.stats.move_speed);
+        if (creature.input.left) creature.xsp = max(creature.xsp - control_speed, -creature.stats.move_speed);
     }
-    x += creature.xsp;
+
+    // Use move_and_collide for horizontal movement
+    move_and_collide(creature.xsp, 0, obj_floor);
     
     var _grounded = place_meeting(x, y + 1, obj_floor);
     
+    // Handle slopes - like the reference code
+    if (_grounded && place_meeting(x, y + abs(creature.xsp) + 1, obj_floor) && creature.ysp >= 0) {
+        creature.ysp += abs(creature.xsp) + 1;
+    }
+    
     switch (creature.state) {
         case PlayerState.KNOCKBACK:
-            // Apply gravity
             creature.ysp += GRAVITY;
             if (_grounded) {
                 creature.state = PlayerState.NORMAL;
@@ -83,7 +76,6 @@ with(all) {
         creature.jump_released = true;
     }
     
-    // Only apply normal gravity if not in knockback
     if (creature.state != PlayerState.KNOCKBACK) {
         if (!_grounded) {
             creature.ysp += GRAVITY;
@@ -93,12 +85,6 @@ with(all) {
         }
     }
     
-    if (place_meeting(x, y + creature.ysp, obj_floor)) {
-        while (!place_meeting(x, y + sign(creature.ysp), obj_floor)) {
-            y += sign(creature.ysp);
-        }
-        creature.ysp = 0;
-        if (!_grounded && creature.state != PlayerState.KNOCKBACK) creature.state = PlayerState.NORMAL;
-    }
-    y += creature.ysp;
+    // Use move_and_collide for vertical movement
+    move_and_collide(0, creature.ysp, obj_floor);
 }
