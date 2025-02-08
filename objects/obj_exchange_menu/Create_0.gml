@@ -13,3 +13,10 @@ orb_types = [
     {name: "Defense Orb", color: c_purple, type: "defense"},
     {name: "Manifest Orb", color: c_orange, type: "manifest"}
 ];
+
+// Define valid orb types that can be exchanged
+valid_types = ["life", "power", "speed", "defense", "manifest", "blank"];
+
+function is_valid_orb(item) {
+    return (item != undefined && array_contains(valid_types, item.type));
+}

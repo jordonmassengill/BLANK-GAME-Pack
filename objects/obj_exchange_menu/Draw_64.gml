@@ -32,10 +32,13 @@ var player = instance_find(obj_player_creature_parent, 0);
 if (player) {
     // Draw inventory column
     var items = player.creature.inventory.items;
+    var display_index = 0;
     for (var i = 0; i < array_length(items); i++) {
-        var y_pos = start_y + (i * line_height);
+        var valid_types = ["life", "power", "speed", "defense", "manifest", "blank"];
         
-        if (items[i] != undefined) {
+        if (items[i] != undefined && array_contains(valid_types, items[i].type)) {
+            var y_pos = start_y + (display_index * line_height);
+            
             // Draw selection highlight if slot is selected
             if (array_get_index(selected_inventory_slots, i) != -1) {
                 draw_set_color(c_yellow);
@@ -55,6 +58,8 @@ if (player) {
             draw_circle(left_col_x + 10, y_pos + line_height/2, 8, false);
             draw_set_color(c_white);
             draw_text(left_col_x + 30, y_pos, items[i].name);
+            
+            display_index++;
         }
     }
     

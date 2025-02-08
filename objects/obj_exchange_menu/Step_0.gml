@@ -1,6 +1,5 @@
 // obj_exchange_menu Step Event
 if (!menu_active) exit;
-
 var player = instance_find(obj_player_creature_parent, 0);
 if (!player) exit;
 
@@ -14,25 +13,28 @@ if (player.creature.input.left && cursor_position == "options") {
     selected_item = 0;
 }
 
+var valid_types = ["life", "power", "speed", "defense", "manifest", "blank"];
+
 // Handle up/down navigation
 if (player.creature.input.menu_up) {
     if (cursor_position == "inventory") {
-        // Start from current position and move up
         selected_item--;
-        // Keep moving up until we find a valid slot or reach the top
-        while (selected_item >= 0 && player.creature.inventory.items[selected_item] == undefined) {
+        // Keep moving up until we find a valid orb or reach the top
+        while (selected_item >= 0 && 
+              (player.creature.inventory.items[selected_item] == undefined || 
+               !array_contains(valid_types, player.creature.inventory.items[selected_item].type))) {
             selected_item--;
         }
         // If we went past the top, wrap to bottom
         if (selected_item < 0) {
-            // Find the last valid slot from the bottom
             selected_item = array_length(player.creature.inventory.items) - 1;
-            while (selected_item >= 0 && player.creature.inventory.items[selected_item] == undefined) {
+            while (selected_item >= 0 && 
+                  (player.creature.inventory.items[selected_item] == undefined || 
+                   !array_contains(valid_types, player.creature.inventory.items[selected_item].type))) {
                 selected_item--;
             }
         }
     } else {
-        // Options column stays the same
         selected_item--;
         if (selected_item < 0) selected_item = array_length(orb_types) - 1;
     }
@@ -40,24 +42,23 @@ if (player.creature.input.menu_up) {
 
 if (player.creature.input.menu_down) {
     if (cursor_position == "inventory") {
-        // Start from current position and move down
         selected_item++;
-        // Keep moving down until we find a valid slot or reach the bottom
+        // Keep moving down until we find a valid orb or reach the bottom
         while (selected_item < array_length(player.creature.inventory.items) && 
-               player.creature.inventory.items[selected_item] == undefined) {
+              (player.creature.inventory.items[selected_item] == undefined || 
+               !array_contains(valid_types, player.creature.inventory.items[selected_item].type))) {
             selected_item++;
         }
         // If we went past the bottom, wrap to top
         if (selected_item >= array_length(player.creature.inventory.items)) {
-            // Find the first valid slot from the top
             selected_item = 0;
             while (selected_item < array_length(player.creature.inventory.items) && 
-                   player.creature.inventory.items[selected_item] == undefined) {
+                  (player.creature.inventory.items[selected_item] == undefined || 
+                   !array_contains(valid_types, player.creature.inventory.items[selected_item].type))) {
                 selected_item++;
             }
         }
     } else {
-        // Options column stays the same
         selected_item++;
         if (selected_item >= array_length(orb_types)) selected_item = 0;
     }
@@ -69,12 +70,13 @@ if (player.creature.input.menu_select) {
         // Toggle selection of inventory slot
         var slot_index = selected_item;
         var array_index = array_get_index(selected_inventory_slots, slot_index);
+        var item = player.creature.inventory.items[slot_index];
         
-        if (array_index == -1 && player.creature.inventory.items[slot_index] != undefined) {
-            // Add to selected slots
+        if (array_index == -1 && 
+            item != undefined && 
+            array_contains(valid_types, item.type)) {
             array_push(selected_inventory_slots, slot_index);
         } else if (array_index != -1) {
-            // Remove from selected slots
             array_delete(selected_inventory_slots, array_index, 1);
         }
     } else {
