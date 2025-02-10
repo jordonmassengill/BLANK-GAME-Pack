@@ -10,45 +10,43 @@ function apply_effect(target) {
     if (variable_instance_exists(target, "creature") && 
         variable_struct_exists(target.creature, "inventory")) {
         
-        // Count existing shards in inventory
-        var shard_count = 0;
-        var first_shard_slot = -1;
+        // Look for existing shards
+        var found_shards = undefined;
+        var found_slot = -1;
         var items = target.creature.inventory.items;
         
         for(var i = 0; i < array_length(items); i++) {
             if (items[i] != undefined && items[i].type == "shard") {
-                shard_count++;
-                if (first_shard_slot == -1) first_shard_slot = i;
+                found_shards = items[i];
+                found_slot = i;
+                break;
             }
         }
         
-        // Add this new shard
-        target.creature.inventory.add_item(sharditem);
-        shard_count++;
-        
-        // If we now have 5 shards
-        if (shard_count >= 5) {
-            // Remove 5 shards
-            var shards_removed = 0;
-            var i = 0;
-            while (shards_removed < 5 && i < array_length(items)) {
-                if (items[i] != undefined && items[i].type == "shard") {
-                    target.creature.inventory.remove_item(i);
-                    shards_removed++;
-                }
-                i++;
+        // If we found shards, add to count
+        if (found_shards != undefined) {
+            found_shards.count++;
+            
+            // Check if we now have 5 shards
+            if (found_shards.count >= 5) {
+                // Remove the shards
+                target.creature.inventory.items[@ found_slot] = undefined;
+                
+                // Create blank orb
+                var blank_orb = {
+                    name: "Blank Orb",
+                    color: c_gray,
+                    type: "blank",
+                    description: "Can be exchanged for any orb type at an exchange platform",
+                    count: 1
+                };
+                
+                // Add the blank orb to inventory
+                target.creature.inventory.add_item(blank_orb);
             }
-            
-            // Create blank orb
-            var blank_orb = {
-                name: "Blank Orb",
-                color: c_gray,
-                type: "blank",
-                description: "Can be exchanged for any orb type at an exchange platform"
-            };
-            
-            // Add the blank orb to inventory
-            target.creature.inventory.add_item(blank_orb);
+        } else {
+            // No existing shards, add new shard item
+            target.creature.inventory.add_item(sharditem);
         }
         
         return true;
