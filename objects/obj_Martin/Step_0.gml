@@ -6,6 +6,12 @@ if (shop_menu[? "active"]) {
     var player = instance_find(obj_player_creature_parent, 0);
     if (player != noone) {
         shop_menu_update(shop_menu, shop, player);
+        
+        // Handle closing shop with back button
+        if (player.creature.input.menu_back) {
+            shop_menu[? "active"] = false;
+            instance_activate_all();
+        }
     }
 }
 
@@ -18,7 +24,7 @@ if (!shop_menu[? "active"]) {
         var center_threshold = 32;
 
         if (abs(platform_center - player_center) <= center_threshold) {
-            // Show "Press SPACE to shop" prompt
+            // Check for either keyboard space or controller Y button
             if (player.creature.input.interact) {
                 shop_menu[? "active"] = true;
                 shop_menu[? "selected_item"] = 0;

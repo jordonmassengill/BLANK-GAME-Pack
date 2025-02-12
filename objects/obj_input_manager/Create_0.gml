@@ -56,7 +56,7 @@ update_player_input = function(player_obj) {
         input.menu_back = gamepad_button_check_pressed(0, gp_face2);
         
         // New interact input for opening the shop
-        input.interact = gamepad_button_check_pressed(0, gp_face3); // Example: Use a different button (e.g., Y button)
+        input.interact = gamepad_button_check_pressed(0, gp_face4); // Y button
         
         if (mouse_check_button_pressed(mb_left)) {
             input.using_controller = false;

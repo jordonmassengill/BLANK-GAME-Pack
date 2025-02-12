@@ -22,7 +22,7 @@ if (!shop_menu[? "active"]) {
         if (abs(platform_center - player_center) <= center_threshold) {
             draw_set_halign(fa_center);
             draw_set_color(c_white);
-            draw_text(x, y - 48, "Press SPACE to shop");
+            draw_text(x, y - 48, "Press SPACE/Y to shop");
             draw_set_halign(fa_left);
         }
     }
