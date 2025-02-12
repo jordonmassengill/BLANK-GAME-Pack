@@ -26,12 +26,11 @@ if (nearest_npc != noone) {
     }
 }
 
-// Hit timer logic
+// Hit timer logic - Only reset shooting state when actually hit
 if (hit_timer > 0) {
     hit_timer--; // Decrement the hit timer
     if (hit_timer <= 0) {
         is_melee_attacking = false;  // Reset attack state
-        is_shooting = false;         // Reset shooting state
     }
 }
 
@@ -46,10 +45,7 @@ if (closest_target != noone && closest_distance <= creature.detection_range) {
 if (creature.current_health <= 0) {
     var player = instance_find(obj_player_creature_parent, 0);
     if (player != noone) {
-        show_debug_message("Before currency add: " + string(player.creature.currency));
         player.creature.currency += creature.currency_value;
-        show_debug_message("After currency add: " + string(player.creature.currency));
-        show_debug_message("Added currency value: " + string(creature.currency_value));
     }
     
     // Call enemy-specific death event
