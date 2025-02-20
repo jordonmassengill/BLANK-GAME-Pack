@@ -1,6 +1,6 @@
 // obj_explosion Create Event
 creator = noone;
-base_damage = 50;  // Explosion holds its own base damage
+base_damage = 50;
 has_dealt_damage = false;
 image_speed = 1;
 
@@ -8,8 +8,6 @@ image_speed = 1;
 function deal_damage() {
     if (has_dealt_damage || !creator) return;
     
-    // Calculate damage using creator's Area of Effect stat
-    var final_damage = base_damage * creator.creature.stats.get_area_of_effect();
     // Get radius using creator's stats
     var explosion_radius = creator.creature.stats.get_explosion_radius();
     
@@ -25,12 +23,15 @@ function deal_damage() {
             for (var j = 0; j < num; j++) {
                 var target = targets[| j];
                 if (variable_instance_exists(target, "creature")) {
-                    global.health_system.damage_creature(target, final_damage);
-                    var target_type = target_types[i] == obj_enemy_parent ? "enemy" : "NPC";
+                    // Let the damage system handle all calculations
+                    global.health_system.damage_creature(
+                        target, 
+                        calculate_damage(base_damage, DAMAGE_TYPE.AOE, target, ELEMENT_TYPE.NONE, creator)
+                    );
                 }
             }
         }
-        ds_list_clear(targets);  // Clear list for next target type
+        ds_list_clear(targets);
     }
     
     ds_list_destroy(targets);

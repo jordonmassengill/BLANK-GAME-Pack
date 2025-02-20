@@ -115,14 +115,14 @@ if (stats_menu_active) {
 
                 // Finesse upgrade
                 case "Crit Level":
-                        player.creature.stats.crit_level += 1;
-                        points_spent++;
-						break;
-						
-				case "Area of Effect":
-                        player.creature.stats.aoe_level += 0.5;
-                        points_spent++;
-						break;
+                    player.creature.stats.crit_level += 1;
+                    points_spent++;
+                    break;
+                        
+                case "Area of Effect":
+                    player.creature.aoe_level += 1;
+                    points_spent++;
+                    break;
             }
     
             if (points_spent > 0) {
