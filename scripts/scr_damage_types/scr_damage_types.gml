@@ -13,6 +13,7 @@ function create_projectile_properties(base_damage, damage_type, element_type, ba
         base_damage: base_damage,
         damage_type: damage_type,
         element_type: element_type,
+        base_radius: base_radius,  // Add this property to store radius
         
         dot_damage: 0,
         dot_duration: 0,
@@ -23,14 +24,9 @@ function create_projectile_properties(base_damage, damage_type, element_type, ba
         armor_pierce: 0
     };
     
-    // Only add base_radius if it's AOE damage or if explicitly provided
-    if (damage_type == DAMAGE_TYPE.AOE) {
-        if (base_radius == undefined) {
-            show_error("base_radius is required for AOE damage type", true);
-        }
-        props.base_radius = base_radius;
-    } else if (base_radius != undefined) {
-        props.base_radius = base_radius;
+    // Only check for base_radius if it's AOE damage
+    if (damage_type == DAMAGE_TYPE.AOE && base_radius == undefined) {
+        show_error("base_radius is required for AOE damage type", true);
     }
     
     return props;

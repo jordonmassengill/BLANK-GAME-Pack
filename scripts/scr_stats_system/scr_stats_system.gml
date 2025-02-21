@@ -56,12 +56,10 @@ function create_stats() {
         },
         
         get_physical_damage: function() {
-            // Returns the current physical damage level
             return physical_damage + physical_damage_bonus;
         },
         
         get_magical_damage: function() {
-            // Returns the current magical damage level
             return magical_damage + magical_damage_bonus;
         },
         
