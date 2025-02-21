@@ -1,7 +1,9 @@
 // obj_explosion Create Event
 creator = noone;
+damage_type = DAMAGE_TYPE.AOE;
 base_damage = 50;
 has_dealt_damage = false;
+base_radius = 32;
 image_speed = 1;
 
 // Deal damage to all valid targets in radius
@@ -17,7 +19,7 @@ function deal_damage() {
     
     // Check each target type
     for (var i = 0; i < array_length(target_types); i++) {
-        var num = collision_circle_list(x, y, explosion_radius, target_types[i], false, true, targets, false);
+        var num = collision_circle_list(x, y, aoe_radius, target_types[i], false, true, targets, false);
         
         if (num > 0) {
             for (var j = 0; j < num; j++) {

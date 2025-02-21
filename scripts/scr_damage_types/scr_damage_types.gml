@@ -7,8 +7,9 @@ enum DAMAGE_TYPE {
     AOE     
 }
 
-function create_projectile_properties(base_damage, damage_type, element_type) {
-    return {
+function create_projectile_properties(base_damage, damage_type, element_type, base_radius = undefined) {
+    // Initialize the base properties
+    var props = {
         base_damage: base_damage,
         damage_type: damage_type,
         element_type: element_type,
@@ -21,12 +22,21 @@ function create_projectile_properties(base_damage, damage_type, element_type) {
         stun_duration: 0,
         armor_pierce: 0
     };
+    
+    // Only add base_radius if it's AOE damage or if explicitly provided
+    if (damage_type == DAMAGE_TYPE.AOE) {
+        if (base_radius == undefined) {
+            show_error("base_radius is required for AOE damage type", true);
+        }
+        props.base_radius = base_radius;
+    } else if (base_radius != undefined) {
+        props.base_radius = base_radius;
+    }
+    
+    return props;
 }
 
 function calculate_damage(amount, damage_type, target, element_type, attacker) {
-    show_debug_message("=== DAMAGE CALCULATION START ===");
-    show_debug_message("Base amount: " + string(amount));
-    show_debug_message("Damage type: " + string(damage_type));
     
     var final_damage = amount;
     var armor = target.creature.stats.get_armor();
@@ -34,8 +44,7 @@ function calculate_damage(amount, damage_type, target, element_type, attacker) {
     var damage_level = 1;
     var damage_bonus = 1;
     var armor_reduction = 1;
-    
-    show_debug_message("Target armor: " + string(armor));
+ 
     
     if (variable_instance_exists(attacker, "creature")) {
         if (variable_instance_exists(attacker, "is_crit")) {
