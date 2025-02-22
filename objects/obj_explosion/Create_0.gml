@@ -20,3 +20,8 @@ projectile.initialize({
 });
 
 projectile.shooter = creator;
+
+
+creator_changed = function() {
+    projectile.shooter = creator;  // Update projectile.shooter whenever creator changes
+}
