@@ -1,17 +1,20 @@
 {
   "$GMObject":"",
-  "%Name":"obj_pickup_parent",
+  "%Name":"obj_ghoststrikep",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_pickup_parent",
+  "name":"obj_ghoststrikep",
   "overriddenProperties":[],
   "parent":{
-    "name":"pickup_parent",
-    "path":"folders/Objects Parents/pickup_parent.yy",
+    "name":"obj_weapons",
+    "path":"folders/Objects/obj_Items/obj_weapons.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_pickup_parent",
+    "path":"objects/obj_pickup_parent/obj_pickup_parent.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -29,7 +32,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"sGhoststrikep",
+    "path":"sprites/sGhoststrikep/sGhoststrikep.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }

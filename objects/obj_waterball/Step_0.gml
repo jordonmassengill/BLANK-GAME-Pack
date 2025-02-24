@@ -1,4 +1,4 @@
-// obj_fireball Step Event
+// obj_waterball Step Event
 if (projectile.update() || place_meeting(x, y, obj_floor)) {
     instance_destroy();
     exit;
