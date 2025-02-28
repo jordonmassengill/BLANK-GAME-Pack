@@ -51,27 +51,15 @@ function create_status_manager() {
                         effect.current_tick = 0;
                         
                         if (effect.type == STATUS_TYPE.DOT) {
-                            // Try component health system first
+                            // Apply DOT damage via component
                             if (variable_instance_exists(target, "entity") && 
                                 variable_struct_exists(target.entity, "health")) {
                                 
-                                // Apply DOT damage via component
                                 target.entity.health.take_damage(effect.magnitude);
-                                
-                                // Sync with traditional system during transition
-                                if (variable_instance_exists(target, "creature") && 
-                                    variable_struct_exists(target.creature, "current_health")) {
-                                    target.creature.current_health = target.entity.health.current_health;
-                                }
-                            }
-                            // Otherwise use traditional system
-                            else if (variable_instance_exists(target, "creature") && 
-                                    variable_struct_exists(target.creature, "current_health")) {
                                 
                                 if (variable_global_exists("damage_number_system")) {
                                     global.damage_number_system.add_number(target, effect.magnitude, false);
                                 }
-                                target.creature.current_health -= effect.magnitude;
                             }
                         }
                     }

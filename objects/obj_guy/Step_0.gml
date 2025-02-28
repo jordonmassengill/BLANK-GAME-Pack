@@ -7,23 +7,8 @@ creature.state_machine.update();
 // Update health component
 entity.health.update(1/60);
 
-// TRANSITION: Sync health between old and new systems
-// This ensures changes to one system affect the other
-if (entity.health.current_health != creature.current_health) {
-    // If component health was changed directly
-    if (entity.health.current_health < creature.current_health) {
-        // Component health is lower, sync to creature
-        creature.current_health = entity.health.current_health;
-    } else {
-        // Creature health is lower (enemy damage), sync to component
-        entity.health.current_health = creature.current_health;
-    }
-}
-
-// Sync regeneration rate
+// Sync regeneration rate from creature stats
 entity.health.regen_rate = creature.stats.health_regen;
-
-// No need to check for death - the component handles it via callback
 
 // Handle hit timer
 if (hit_timer > 0) hit_timer--;

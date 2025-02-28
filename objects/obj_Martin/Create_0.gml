@@ -1,7 +1,7 @@
 // obj_Martin Create Event (parent = obj_npc_parent)
 event_inherited();
 
-// Create creature properties
+// Create creature properties for non-health related functionality
 creature = create_creature_properties();
 
 // Setup component entity
@@ -45,20 +45,9 @@ shop_menu = create_shop_menu();
 
 // Add hit function
 hit = function(damage_amount = 0) {
-    // We don't have a hit animation for Martin, but we still need this function
-    // to handle damage from the old system
-    
     // Apply damage using the health component
-    if (damage_amount > 0 && variable_instance_exists(id, "entity") && 
-        variable_struct_exists(entity, "health")) {
+    if (damage_amount > 0 && variable_struct_exists(entity, "health")) {
         entity.health.take_damage(damage_amount);
-        
-        // Sync with old system during transition
-        creature.current_health = entity.health.current_health;
-    } else if (variable_instance_exists(id, "entity") && 
-              variable_struct_exists(entity, "health")) {
-        // If no damage amount was provided (old system), sync from creature to component
-        entity.health.current_health = creature.current_health;
     }
     
     return true;
