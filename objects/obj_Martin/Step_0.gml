@@ -1,6 +1,23 @@
 // obj_Martin Step Event
 event_inherited();
 
+// Sync entity position with object
+if (variable_instance_exists(id, "entity")) {
+    entity.x = x;
+    entity.y = y;
+    
+    // Sync health between old and new systems during transition
+    // Added safety checks to ensure both properties exist
+    if (variable_struct_exists(creature, "current_health") && 
+        variable_struct_exists(entity, "health") && 
+        variable_struct_exists(entity.health, "current_health") &&
+        creature.current_health != entity.health.current_health) {
+        
+        // We prioritize the component system's health value
+        creature.current_health = entity.health.current_health;
+    }
+}
+
 // Handle menu
 if (shop_menu[? "active"]) {
     var player = instance_find(obj_player_creature_parent, 0);

@@ -4,20 +4,26 @@ event_inherited();
 // Update state machine
 creature.state_machine.update();
 
-// Check for death
-if (creature.current_health <= 0) {
-    // Create death effect
-    var death_effect = instance_create_layer(x, y, "Instances", obj_HeroDeath);
-    death_effect.sprite_index = sHeroDeath;
-    death_effect.image_xscale = sprite_direction;
-    
-    // Create death screen
-    instance_create_layer(0, 0, "Instances", obj_death_screen);
-    
-    creature.status_manager.clear_effects();
-    instance_destroy();
-    exit;
+// Update health component
+entity.health.update(1/60);
+
+// TRANSITION: Sync health between old and new systems
+// This ensures changes to one system affect the other
+if (entity.health.current_health != creature.current_health) {
+    // If component health was changed directly
+    if (entity.health.current_health < creature.current_health) {
+        // Component health is lower, sync to creature
+        creature.current_health = entity.health.current_health;
+    } else {
+        // Creature health is lower (enemy damage), sync to component
+        entity.health.current_health = creature.current_health;
+    }
 }
+
+// Sync regeneration rate
+entity.health.regen_rate = creature.stats.health_regen;
+
+// No need to check for death - the component handles it via callback
 
 // Handle hit timer
 if (hit_timer > 0) hit_timer--;
@@ -126,4 +132,9 @@ if (hit_timer > 0) {
 // If we're not pressing jump, enable jump released flag
 if (!creature.input.jump) {
     creature.jump_released = true;
+}
+
+// Test damage - press T to apply damage directly to component
+if (keyboard_check_pressed(ord("T"))) {
+    entity.health.take_damage(10);
 }
