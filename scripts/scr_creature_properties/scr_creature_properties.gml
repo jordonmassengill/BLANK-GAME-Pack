@@ -198,25 +198,29 @@ function setup_basic_states(creature_props) {
         })
     );
     
-    // KNOCKBACK state
-    creature_props.state_machine.add_state("KNOCKBACK", 
-        method(creature_props, function() {
-            // Enter knockback state
-            // (xsp and ysp should be set when transitioning to this state)
-        }),
-        method(creature_props, function() {
-            // Apply gravity
-            ysp += GRAVITY;
-            
-            // Apply drag to horizontal movement
-            xsp *= 0.9;
-            
-            // Allow minimal control during knockback
-            var control_speed = stats.get_move_speed() * 0.1;
-            if (input.right) xsp = min(xsp + control_speed, stats.get_move_speed());
-            if (input.left) xsp = max(xsp - control_speed, -stats.get_move_speed());
-        })
-    );
+	// KNOCKBACK state - FIXED VERSION
+creature_props.state_machine.add_state("KNOCKBACK", 
+    method(creature_props, function() {
+        // Enter knockback state
+        // (xsp and ysp should be set when transitioning to this state)
+    }),
+    method(creature_props, function() {
+        // Apply gravity
+        ysp += GRAVITY;
+        
+        // Apply drag to horizontal movement
+        xsp *= 0.9;
+        
+        // Allow minimal control during knockback
+        var control_speed = stats.get_move_speed() * 0.1;
+        if (input.right) xsp = min(xsp + control_speed, stats.get_move_speed());
+        if (input.left) xsp = max(xsp - control_speed, -stats.get_move_speed());
+        
+        // NOTE: We don't check for ground here anymore!
+        // We leave that to the obj_guy Step event
+        // This prevents the "owner not set" error
+    })
+);
     
     // Start in IDLE state
     creature_props.state_machine.change_state("IDLE");
