@@ -1,5 +1,7 @@
 // obj_Orchyde Step Event
 event_inherited();
+entity.weapon.update(); // <-- ADD THIS LINE to make its cooldown work.
+
 // Handle hit timer
 if (hit_timer > 0) {
     hit_timer--;
@@ -31,7 +33,7 @@ if (nearest_player != noone) {
             if (distance_to_player > melee_range) {
                 if (creature.shotgun_cooldown <= 0) {
                     var direction_to_player = point_direction(x, y, nearest_player.x, nearest_player.y);
-                    entity.weapon.fire("primary");
+                    entity.weapon.fire(closest_target);
 					// The component handles cooldowns and firing. We just need to set the animation state.
 					is_shooting = true;
 					sprite_index = sOrchydeShoot;
