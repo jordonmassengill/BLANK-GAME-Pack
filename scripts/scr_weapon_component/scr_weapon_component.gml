@@ -18,7 +18,16 @@ function create_weapon_component(owner_entity) {
 		//----------------------------------------------------------------------
 		// METHODS
 		//----------------------------------------------------------------------
-
+		
+        /// @function can_fire()
+        /// @description Checks if the currently active weapon can be fired.
+        can_fire: function() {
+            var active_weapon = self.slots[self.active_slot];
+            if (active_weapon == undefined) {
+                return false; // No weapon equipped
+            }
+            return (active_weapon.data.cooldown <= 0);
+        },
 		/// @function init()
 		/// @description Initializes the component.
 		init: function() {
@@ -111,9 +120,9 @@ function create_weapon_component(owner_entity) {
 			var shot_fired = false;
 			
 			// AIMING LOGIC: Handles both AI and Player
-			if (target != noone) {
-				// AI Aiming: If a target is provided, aim directly at it.
-				aim_angle = point_direction(inst.x, inst.y, target.x, target.y);
+			if (is_struct(target) || instance_exists(target)) {
+			// AI Aiming: If a valid target is provided, aim directly at it.
+				 aim_angle = point_direction(inst.x, inst.y, target.x, target.y);
 			} else {
 				// Player Aiming: If no target, use the player's input struct.
 				if (creature.input.using_controller) {

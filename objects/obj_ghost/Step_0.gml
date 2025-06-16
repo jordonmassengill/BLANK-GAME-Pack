@@ -14,8 +14,3 @@ if (closest_target != noone && closest_distance <= creature.detection_range) {
     sprite_index = sGhost;
     image_index = 0;
 }
-
-// Reset shooting state after cooldown is back
-if (creature.ghostball_cooldown <= 0) {
-    is_shooting = false;
-}
