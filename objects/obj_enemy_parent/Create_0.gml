@@ -2,9 +2,6 @@
 event_inherited();  // Get creature stuff
 is_enemy = true;
 
-entity = {};
-entity.owner_instance = id;
-
 // Initialize entity for component-based health system
 
 // These will be overridden by specific enemy types
