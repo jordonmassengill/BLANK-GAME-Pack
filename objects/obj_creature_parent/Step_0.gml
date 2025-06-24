@@ -5,7 +5,9 @@ if (!instance_exists(id)) {
     exit;
 }
 
-// Update the status component for this creature
+// Check if this creature has been upgraded to use the new component system
 if (variable_instance_exists(id, "entity") && entity.has_component("status")) {
+    // If it has the component, just tell it to update itself.
+    // All the logic for applying effects is now handled inside the component.
     entity.status.update();
 }

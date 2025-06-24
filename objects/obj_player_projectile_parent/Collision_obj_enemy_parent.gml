@@ -1,11 +1,12 @@
 // Check if the target instance has finished its Create Event and is ready.
 if (variable_instance_exists(other, "is_ready") && other.is_ready == true) {
 
-    // This is the gatekeeper: ONLY call on_hit if the target has ALL required components.
-    if (variable_instance_exists(other, "entity") && other.entity.has_component("health") && other.entity.has_component("status")) {
+    // If it's ready, then we can safely run our normal logic.
+    if (variable_instance_exists(other, "entity") &&
+        variable_struct_exists(other.entity, "health")) {
         projectile.on_hit(other);
     }
 }
 
-// Always destroy the projectile after a collision.
+// Always destroy the projectile to prevent it from passing through an "unready" enemy.
 instance_destroy();
