@@ -31,7 +31,7 @@ add_component(entity, "movement", create_movement_component(entity, creature.sta
 var weapon_comp = create_weapon_component(entity);
 add_component(entity, "weapon", weapon_comp);
 add_component(entity, "inventory", create_inventory_component(16));
-add_component(entity, "status", create_status_component(entity));
+add_component(entity, "status", create_status_component(entity)); // <-- ADD THIS LINE
 // --- END COMPONENT SETUP ---
 
 
@@ -57,3 +57,4 @@ hit = function(damage_amount = 0) {
 	}
 	return true;
 }
+is_ready = true;
